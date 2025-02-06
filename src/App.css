@@ -4,7 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
-
+*{
+  text-decoration: none;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +41,144 @@
 
 .read-the-docs {
   color: #888;
+}
+/* Estilos generales */
+body {
+  background-color: #000;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilos de la cuadrícula */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 62px;
+  justify-items: center;
+}
+
+/* Tarjeta de película */
+.card {
+  background-color: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.3);
+  
+}
+
+.poster {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.movie-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.release-date {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+/* Botón Detalle */
+.detail-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.detail-button:hover {
+  background-color: darkred;
+}
+.film-details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #111;
+}
+
+.film-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #222;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 800px;
+  box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+  margin: 0px auto;
+}
+
+.film-left {
+  flex: 1;
+}
+
+.film-image {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.film-right {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.film-title {
+  font-size: 24px;
+  color: red;
+}
+
+.film-right p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.back-button {
+  display: block;
+  background-color: red;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  font-weight: bold;
+  margin-top: 20px;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.back-button:hover {
+  background-color: darkred;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: white;
 }

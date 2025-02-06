@@ -1,65 +1,93 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-function Home() {
+import { useNavigate, useParams } from "react-router-dom";
 
-  const [films, setfilms] = useState([]);
-  const [loading, setLoading] = useState(true);
+const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4N2MwODc5N2NhMGM3Y2RkYzQyNWVhODRhZDUzYjA3YSIsIm5iZiI6MTczODY5NjY3NC4xOTYsInN1YiI6IjY3YTI2N2UyZWVhODlhZGYwOTAzMGE0ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.N7Eht4l14qGyoqVRPXkKNRa_qzS7z4GctuE9hfjW26o'
+    }
+  };
 
-  console.log("Nombre recibido:", nombre); // Depuración: imprime la query recibida en la URL
+  const Home = () => {
+    const [movies, setMovies] = useState([]);
+    const [page, setPage] = useState(1);
+    const { id: query } = useParams(); 
+    const navigate = useNavigate();
+ 
 
-  useEffect(() => {
-    if (!nombre) return;
+    const handleSearch = (e) => {
+        navigate(`/${e.target.value}`);
+      };
+    
+     
+  
+      useEffect(() => {
+        const fetchMovies = async () => {
+          try {
+            const response = await fetch(
+              query
+                ? `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=es-ES&page=${page}`
+                : `https://api.themoviedb.org/3/movie/popular?language=es-ES&page=${page}`,
+              options
+            );
+            const data = await response.json();
+            setMovies(data.results || []);
+          } catch (error) {
+            console.error("Error al obtener películas:", error);
+          }
+        };
+    
+        fetchMovies();
+      }, [query, page]);
 
-    setLoading(true);
-    fetch(`https://api.pokemontcg.io/v2/films?q=name:${encodeURIComponent(nombre)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Respuesta de la API:", data); // Depuración: Verifica la respuesta de la API
-        setfilms(data.data || []);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching Pokémon films:", error);
-        setLoading(false);
-      });
-  }, [nombre]);
-
-  return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Pokémon Card Results</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="grid grid-cols-4 gap-4">
-          {films.length > 0 ? (
-            films.map((film) => (
-              <div
-                key={card.id}
-                className="border rounded-xl shadow-lg overflow-hidden"
-              >
-                <Link to ={`/card/${card.id}`}>
-                <img
-                  src={film.images.large}
-                  alt={film.name}
-                  className="w-full h-auto"
-                />
-                </Link>
-                <div className="p-2">
-                  <h2 className="text-lg font-semibold">{film.name}</h2>
-                  <p className="text-gray-600">HP: {film.hp}</p>
-                  <p className="text-gray-600">Set: {film.set.name}</p>
+      return (
+        <div className="container">
+         
+            <input
+              type="text"
+              value={query || ""}
+              onChange={handleSearch}
+              placeholder="Buscar una película"
+              className="w-full p-3 border rounded-xl shadow-md"
+            />
+           
+         
+    
+          <div className="pagination-buttons">
+            <button onClick={() => setPage(page > 1 ? page - 1 : 1)} className="nav-button">Atrás</button>
+            <button onClick={() => setPage(page + 1)} className="nav-button">Siguiente</button>
+          </div>
+    
+          <h2 className="title">{query ? `Resultados de "${query}"` : "Películas Populares"}</h2>
+    
+          <div className="grid-container">
+            {movies.length > 0 ? (
+              movies.map((movie) => (
+                <div key={movie.id} className="card">
+                  <img 
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                    alt={movie.title} 
+                    className="poster"
+                  />
+                  <div className="card-content">
+                    <h3 className="movie-title">{movie.title}</h3>
+                    <p className="release-date">{new Date(movie.release_date).toLocaleDateString("es-ES")}</p>
+                    <Link to={`/film/${movie.id}`}>
+                      <button className="detail-button">Detalle</button>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <p>No films to show</p>
-          )}
+              ))
+            ) : (
+              <p>No se encontraron resultados.</p>
+            )}
+          </div>
         </div>
-      )}
-    </div>
-  );
-}
+      );
+};
+
 
 export default Home;
